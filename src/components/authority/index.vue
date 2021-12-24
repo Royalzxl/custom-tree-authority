@@ -49,7 +49,7 @@
                 props.tree.forEach((item, index) => {
                     const sameValueList = []
                     if (value.indexOf(item.id) !== -1) sameValueList.push(item.id)
-                    item.children.forEach((el, idx) => {
+                    item.children && item.children.forEach((el, idx) => {
                         const list = obtainData(el)
                         list.forEach(ele => {
                             value.forEach(elem => {

@@ -58,8 +58,10 @@
             })
 
             // 初始化选中数据
+            // 优化选中逻辑代码
             const initHasChildCheckHandle = value => {
-                props.item.children.forEach((el, index) => {
+                if (value.length) data.checkAll = true
+                props.item.children && props.item.children.forEach((el, index) => {
                     const list = obtainData(el)
                     const sameValueList = []
                     list.forEach(ele => {
@@ -67,7 +69,6 @@
                             if (ele === elem) sameValueList.push(elem)
                         })
                     })
-                    sameValueList.length && (data.checkAll = true)
                     data.hasChildCheck[index] = { flag: sameValueList.length !== 0, checked: sameValueList }
                 })
             }
@@ -76,10 +77,10 @@
             const handleCheckAll = value => {
                 data.checkAll = value
                 if (data.checkAll) {
-                    props.item.children.forEach((el, index) => { data.hasChildCheck[index] = { flag: true, checked: obtainData(el) } })
+                    props.item.children && props.item.children.forEach((el, index) => { data.hasChildCheck[index] = { flag: true, checked: obtainData(el) } })
                     data.checkedIdList = obtainData(props.item)
                 } else {
-                    props.item.children.forEach((el, index) => { data.hasChildCheck[index] = { flag: false, checked: [] } })
+                    props.item.children && props.item.children.forEach((el, index) => { data.hasChildCheck[index] = { flag: false, checked: [] } })
                     data.checkedIdList = []
                 }
 
@@ -103,7 +104,11 @@
 
                 // 分情况 控制全选及数据
                 if (data.checkedIdList.length) data.checkedIdList = [...data.checkedIdList, props.item.id]
-                else data.checkAll = false
+                // 子集全是按钮
+                const isBtn = props.item.children.filter(el => el.menuType)
+                if (!data.checkedIdList.length && isBtn.length === props.item.children.length) {
+                    data.checkedIdList = [props.item.id]
+                }else data.checkAll = false
 
                 emit('mergeData', props.index, data.checkedIdList)
             }
