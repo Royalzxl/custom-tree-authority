@@ -72,7 +72,7 @@
             }
 
             // 立即执行执行副作用
-            watch(props.allCheck, value => { initHasChildCheckHandle(value) }, { deeo: true, immediate: true })
+            watch(props.allCheck, value => { initHasChildCheckHandle(value) }, { deep: true, immediate: true })
 
             const { checkedIdList } = toRefs(data)
 

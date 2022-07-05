@@ -120,7 +120,7 @@
 
             // 注意侦听在vue3.0+中分两种类型
             // 具体区别与详情请查阅 https://v3.cn.vuejs.org/api/computed-watch-api.html#%E4%BE%A6%E5%90%AC%E5%8D%95%E4%B8%80%E6%BA%90
-            watch(() => props.allCheck, value => initHasChildCheckHandle(value), { deeo: true, immediate: true })
+            watch(() => props.allCheck, value => initHasChildCheckHandle(value), { deep: true, immediate: true })
 
             const { expand, checkAll, hasChildCheck } = toRefs(data)
 
