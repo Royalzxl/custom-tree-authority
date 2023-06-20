@@ -110,7 +110,7 @@
 
                 // 本身选中，但并不是全选时
                 if (data.levelCheck && !data.checkAll) {
-                    // 定义一个零时数组，存储下级存在子集的选中数据
+                    // 定义一个临时数组，存储下级存在子集的选中数据
                     let hasChildCheck = []
 
                     // 定义一个变量存储对应情况下的数组值
@@ -173,7 +173,10 @@
                     const isPage = noChild.value.filter(el => el.menuType === 0)
                     pushOutData = [...value, props.item.id]
 
-                    if (!value.length && isPage.length) {
+                    // fix isPage.length => isPage.length === noChild.value.length
+                    // isPage.length: 仅考虑了没有孩子的数据全是页面
+                    // 未曾考虑到 当前有页面也有按钮时的情况
+                    if (!value.length && isPage.length === noChild.value.length) {
                         pushOutData = [...value]
                         data.levelCheck = false
                     }
@@ -191,8 +194,15 @@
                     // 处理当前组件选中数据
                     // 获取移除的选中数据
                     let reduces = findDifferentElement2(props.allCheck.checked, [...value, ...data.checkedIdList, props.item.id])
-                    if (!value.length && !data.checkedIdList.length)
-                        reduces = findDifferentElement2(props.allCheck.checked, [...value, ...data.checkedIdList])
+                    
+                    // fix isPage.length => isPage.length === noChild.value.length
+                    // isPage.length: 仅考虑了没有孩子的数据全是页面
+                    // 未曾考虑到 当前有页面也有按钮时的情况
+                    const isPage = noChild.value.filter(el => el.menuType === 0)
+                    if (!value.length && isPage.length === noChild.value.length) {
+                        if (!value.length && !data.checkedIdList.length)
+                            reduces = findDifferentElement2(props.allCheck.checked, [...value, ...data.checkedIdList])
+                    }
 
                     // 获取选中数据
                     pushOutData = findDifferentElement2(props.allCheck.checked, reduces)
